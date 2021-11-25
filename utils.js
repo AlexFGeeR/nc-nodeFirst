@@ -1,5 +1,4 @@
 const readline = require("readline");
-const { addNewProduct } = require('./files');
 
 const rl = readline.createInterface({
     input: process.stdin,
