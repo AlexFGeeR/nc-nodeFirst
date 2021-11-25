@@ -1,0 +1,19 @@
+{
+  "name": "nc-nodefirts",
+  "version": "1.0.0",
+  "description": "-",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexFGeeR/nc-nodeFirst.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexFGeeR/nc-nodeFirst/issues"
+  },
+  "homepage": "https://github.com/AlexFGeeR/nc-nodeFirst#readme"
+}
