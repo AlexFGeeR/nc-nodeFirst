@@ -3,12 +3,21 @@ const path = require('path');
 
 const dirPath = path.resolve(__dirname, 'files');
 const filePath = path.resolve(dirPath, 'data.json');
-const FILE = readFile(filePath);
+const file = readFile(filePath);
+const content = file && JSON.parse(file) || [];
 
-const content = FILE && JSON.parse(FILE) || [];
+function addInFile(obj) {
+    content.push(obj);
+    const jsonContent = JSON.stringify(content, null, 2);
+    fs.mkdirSync(dirPath, {recursive: true});
+    fs.writeFileSync(filePath, jsonContent);
+}
 
 function readFile(filePath) {
-    if( fs.existsSync(filePath)) {
+    if ( fs.existsSync(filePath)) {
         return fs.readFileSync(filePath);
     }
+    return null;
 }
+
+module.exports = {addInFile, content};

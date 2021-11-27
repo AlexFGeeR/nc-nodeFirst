@@ -1,4 +1,4 @@
-const { rl, getInput, addProduct } = require('./utils');
+const { rl, getInput, listingProducts, addProduct} = require('./utils');
 
 async function openMenu() {
     console.log('\nWelcome to console shop manager.\n' +
@@ -11,23 +11,23 @@ async function openMenu() {
     input = await getInput(rl);
     switch (input) {
         case '1': {
-            // show all tovars func
-            openMenu();
+            listingProducts();
+            await openMenu();
             break;
         };
         case '2': {
             // Функция добавления товара
-            addProduct();
-            openMenu();
+            await addProduct();
+            await openMenu();
             break;
         };
         case '3': {
-            openMenu();
+            await openMenu();
             break;
             // delete tovar func
         };
         case '4': {
-            openMenu();
+            await openMenu();
             break;
             // edit tovar func
         };
@@ -43,3 +43,4 @@ async function openMenu() {
 }
 
 openMenu();
+
