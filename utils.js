@@ -1,5 +1,5 @@
 const readline = require("readline");
-const { addInFile, content } = require('./files');
+const { addInFile, updateFile, content } = require('./files');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -14,7 +14,7 @@ function getInput(rl) {
 }
 
 function objectBuilder(name, desc, price) {
-    return {id: Object.keys(content).length + 1, name: name, desc: desc, price: price }
+    return {id: Number(Object.keys(content).length + 1), name: name, desc: desc, price: price }
 }
 
 async function addProduct() {
@@ -32,5 +32,79 @@ function listingProducts() {
     console.log(content);
 }
 
+async function searchProduct() {
+    console.log('По какому критерии будем искать товар?\n' +
+        '1 - id\n' +
+        '2 - name\n');
+    let target = await getInput(rl);
+    switch (target) {
+        case '1': {
+            console.log('Введите необходимый id:');
+            let answer = await getInput(rl);
+            return content.findIndex(product => product.id === Number(answer));
+        }
+        case '2': {
+            console.log('Введите необходимое поле name:');
+            let answer = await getInput(rl);
+            return content.findIndex(product => product.name === String(answer));
+        }
+        default: {
+            console.log('Такого варианта не было.');
+            await editProduct();
+            break;
+        }
+    }
+}
 
-module.exports = {rl, getInput, objectBuilder, addProduct, listingProducts};
+async function resetIds() {
+    for( let i = 0; i < content.length; i++ ) {
+        content[i].id = i + 1;
+    }
+}
+
+async function deleteProduct() {
+    let prodId = await searchProduct(); // -1 bug
+    if( prodId === -1 ) {return console.log('Element not found');}
+    content.splice(prodId, 1);
+    await resetIds();
+    updateFile(content);
+    console.log('Удаление прошло успешно!');
+}
+
+async function editProduct() {
+    let prodId = await searchProduct();
+    if( prodId === -1 ) {return console.log('Element not found');}
+    console.log('Что требуется изменить в продукте?\n' +
+        '1 - name\n' +
+        '2 - desc\n' +
+        '3 - price');
+    let answer = await getInput(rl);
+    switch ( answer ) {
+        case '1': {
+            console.log('Введите новое имя товара:');
+            let newName = await getInput(rl);
+            content[prodId].name = String(newName);
+            console.log('Название товара успешно изменено.');
+            break;
+        }
+        case '2': {
+            console.log('Введите новое описание товара:');
+            let newDesc = await getInput(rl);
+            content[prodId].desc = String(newDesc);
+            console.log('Описание товара успешно изменено.');
+            break;
+        }
+        case '3': {
+            console.log('Введите новую стоимость товара.');
+            let newPrice = await getInput(rl);
+            content[prodId].price = String(newPrice);
+            break;
+        }
+        default: {
+            console.error('\nТакого варианта не было.\n');
+            await editProduct();
+        }
+    }
+}
+
+module.exports = {rl, getInput, objectBuilder, addProduct, listingProducts, editProduct, deleteProduct};
